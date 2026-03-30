@@ -11,20 +11,29 @@ data class Task(
     val kudosValue: Int = effort.baseKudos,
     val assignedTo: Long? = null,
     val houseId: Long,
+    val recurrence: Recurrence? = null,
     val createdAt: LocalDateTime = LocalDateTime.now(),
     val completedAt: LocalDateTime? = null
 ) {
     companion object {
-        fun create(title: String, description: String?, effort: Effort, houseId: Long): Task {
+        fun create(title: String, description: String?, effort: Effort, recurrence: Recurrence? = null, houseId: Long): Task {
             require(title.isNotBlank()) { "Title cannot be blank" }
             return Task(
                 title = title,
                 description = description,
                 effort = effort,
+                recurrence = recurrence,
                 houseId = houseId
             )
         }
     }
+}
+
+enum class Recurrence {
+    DAILY,
+    WEEKLY,
+    BIWEEKLY,
+    MONTHLY
 }
 
 enum class Effort(val baseKudos: Int) {
