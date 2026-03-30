@@ -28,6 +28,6 @@ class HouseRepositoryTester : HouseRepository{
     }
 
     override fun delete(house: House) {
-        houses.remove(house)
+        houses.removeIf { it.id == house.id }
     }
 }
