@@ -20,7 +20,7 @@ class CreateTaskUsecaseTest {
     fun `sould create task succesfully`() {
         val user = registerUsecase.execute("Test", "test@email.com", "Password1")
         val house = createHouseUsecase.execute(user.id!!, "Pis de Gràcia")
-        val task = usecase.execute("Comprar pa", "Comprar pa al forn de la cantonada", Effort.MEDIUM, house.id!!)
+        val task = usecase.execute("Comprar pa", "Comprar pa al forn de la cantonada", Effort.MEDIUM, null,house.id!!)
         assertEquals("Comprar pa", task.title)
     }
 
@@ -28,14 +28,14 @@ class CreateTaskUsecaseTest {
     fun `should initialize kudos value from effort`() {
         val user = registerUsecase.execute("Test", "test@email.com", "Password1")
         val house = createHouseUsecase.execute(user.id!!, "Pis de Gràcia")
-        val task = usecase.execute("Comprar pa", null, Effort.MEDIUM, house.id!!)
+        val task = usecase.execute("Comprar pa", null, Effort.MEDIUM, null, house.id!!)
         assertEquals(4, task.kudosValue)  // MEDIUM = 4 baseKudos
     }
 
     @Test
     fun `should throw when house does not exist`() {
         assertThrows(IllegalArgumentException::class.java) {
-            usecase.execute("Comprar pa", null, Effort.LOW, 999L)
+            usecase.execute("Comprar pa", null, Effort.LOW, null, 999L)
         }
     }
 
@@ -44,7 +44,7 @@ class CreateTaskUsecaseTest {
         val user = registerUsecase.execute("Test", "test@email.com", "Password1")
         val house = createHouseUsecase.execute(user.id!!, "Pis de Gràcia")
         assertThrows(IllegalArgumentException::class.java) {
-            usecase.execute("", null, Effort.LOW, house.id!!)
+            usecase.execute("", null, Effort.LOW, null, house.id!!)
         }
     }
 }
