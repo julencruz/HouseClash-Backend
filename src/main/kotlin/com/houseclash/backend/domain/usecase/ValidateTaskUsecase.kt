@@ -15,12 +15,12 @@ class ValidateTaskUsecase (
 ) {
     fun execute(taskId: Long, validatorId: Long, decision: ValidationDecision) : Task {
         val task = taskRepository.findById(taskId)
-        require(task != null) {"Task doesn´t exist"}
+        require(task != null) {"Task doesnt exist"}
         require(task.assignedTo != null) { "Task not assigned" }
         require(task.assignedTo != validatorId) {"Cannot validate your own task"}
         when (decision) {
             ValidationDecision.APPROVE -> {
-                val assignedUser = userRepository.findById(task.assignedTo!!)!!
+                val assignedUser = userRepository.findById(task.assignedTo)!!
                 userRepository.save(assignedUser.addKudos(task.kudosValue))
                 val validatedTask = task.approveTask()
                 return taskRepository.save(validatedTask)
