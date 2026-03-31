@@ -10,11 +10,11 @@ class AssignTaskUsecase (
 ) {
     fun execute(taskId: Long, userId: Long) : Task {
         val user = userRepository.findById(userId)
-        require(user != null) {"User doesn´t exist"}
+        require(user != null) {"User doesnt exist"}
         val task = taskRepository.findById(taskId)
-        require(task != null) {"Task doesn´t exist"}
+        require(task != null) {"Task doesnt exist"}
         require(user.houseId == task.houseId) {"User and Task must belong to the same house"}
-        val assignedTask = task.assignTaskToUser(userId);
+        val assignedTask = task.assignTaskToUser(userId)
         return taskRepository.save(assignedTask)
     }
 }
