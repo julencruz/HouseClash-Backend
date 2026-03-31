@@ -81,6 +81,22 @@ data class Task(
         )
     }
 
+    fun validationDeadline(): LocalDateTime? {
+        return completedAt?.plusHours(24)
+    }
+
+    fun isValidationExpired(): Boolean {
+        return validationDeadline()?.isBefore(LocalDateTime.now()) ?: false
+    }
+
+    fun autoApproveTask() : Task {
+        require(status == TaskStatus.PENDING_REVIEW) { "Task is not pending review" }
+        require(isValidationExpired()) { "Validation deadline has not expired yet" }
+        return this.copy(
+            status = TaskStatus.AUTO_APPROVED
+        )
+    }
+
     fun currentCycleStart(now: LocalDateTime = LocalDateTime.now()): LocalDateTime? {
         if (recurrence == null) return null
         var cycleStart = createdAt

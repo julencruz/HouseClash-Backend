@@ -33,4 +33,16 @@ data class User(
         require(kudos > 0) { "Kudos to add must be positive" }
         return this.copy(kudosBalance = this.kudosBalance + kudos)
     }
+
+    fun spendKudos(amount: Int): User {
+        require(amount > 0) { "Amount must be positive" }
+        require(kudosBalance >= amount) { "Insufficient kudos balance" }
+        return this.copy(kudosBalance = kudosBalance - amount)
+    }
+
+    fun penalizeKudos(amount: Int = 2): User {
+        require(amount > 0) { "Penalty amount must be positive" }
+        val newBalance = if (kudosBalance - amount < 0) 0 else kudosBalance - amount
+        return this.copy(kudosBalance = newBalance)
+    }
 }
