@@ -8,9 +8,10 @@ object TestDataFactory {
         repository: UserRepositoryTester,
         username: String = "TestUser",
         email: String = "test@email.com",
-        passwordHash: String = "hashed_Password1"
+        passwordHash: String = "hashed_Password1",
+        kudosBalance: Int = 0
     ): User {
-        return repository.save(User.create(username, email, passwordHash))
+        return repository.save(User.create(username, email, passwordHash).copy(kudosBalance = kudosBalance))
     }
 
     fun createHouse(
