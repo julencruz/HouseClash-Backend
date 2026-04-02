@@ -169,4 +169,3 @@ class CardControllerTest {
         assertTrue(updatedMember.kudosBalance > 0)
     }
 }
-

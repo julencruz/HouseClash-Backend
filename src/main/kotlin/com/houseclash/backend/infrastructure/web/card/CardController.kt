@@ -46,4 +46,3 @@ class CardController(
         return ResponseEntity.ok(result.toResponse())
     }
 }
-

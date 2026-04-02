@@ -113,4 +113,3 @@ class JwtAuthFilterTest {
         assertNotNull(chain.request)
     }
 }
-

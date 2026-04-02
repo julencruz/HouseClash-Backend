@@ -58,4 +58,3 @@ class JwtServiceTest {
         assertNotEquals(tokenA, tokenB)
     }
 }
-

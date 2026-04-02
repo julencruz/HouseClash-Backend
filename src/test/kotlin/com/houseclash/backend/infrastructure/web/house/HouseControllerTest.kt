@@ -268,4 +268,3 @@ class HouseControllerTest {
         assertEquals(listOf(1, 2), ranks)
     }
 }
-

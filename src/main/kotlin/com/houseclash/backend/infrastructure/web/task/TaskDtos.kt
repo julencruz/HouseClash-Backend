@@ -64,4 +64,3 @@ fun Task.toResponse() = TaskResponse(
     createdAt = this.createdAt,
     completedAt = this.completedAt
 )
-

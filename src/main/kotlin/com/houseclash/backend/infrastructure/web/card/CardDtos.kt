@@ -46,4 +46,3 @@ fun CardEffectResult.toResponse() = CardEffectResultResponse(
     updatedUsers = this.updatedUsers.map { it.toResponse() },
     updatedTasks = this.updatedTasks.map { it.toResponse() }
 )
-
