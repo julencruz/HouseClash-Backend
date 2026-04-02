@@ -28,6 +28,12 @@ data class LoginResponse(
     val user: UserResponse
 )
 
+data class UpdateUserRequest(
+    val username: String? = null,
+    val oldPassword: String? = null,
+    val newPassword: String? = null
+)
+
 fun User.toResponse() = UserResponse(
     id = this.id!!,
     username = this.username,
