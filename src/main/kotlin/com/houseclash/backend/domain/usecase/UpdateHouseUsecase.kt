@@ -14,6 +14,7 @@ class UpdateHouseUsecase(
         val house = houseRepository.findById(houseId)
         require(house != null) { "House not found" }
         require(user.houseId == houseId) { "User does not belong to this house" }
+        require(house.createdBy == userId) { "Only the house captain can update the house." }
 
         val updated = house.update(newName)
         return houseRepository.save(updated)

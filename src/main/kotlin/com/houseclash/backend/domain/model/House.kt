@@ -35,4 +35,8 @@ data class House(
             description = newDescription ?: this.description,
         )
     }
+
+    fun transferOwnership(newOwnerId: Long): House {
+        return this.copy(createdBy = newOwnerId)
+    }
 }
