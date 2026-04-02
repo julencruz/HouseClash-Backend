@@ -1,7 +1,6 @@
 package com.houseclash.backend.helper
 
 import com.houseclash.backend.domain.model.Card
-import com.houseclash.backend.domain.model.CardType
 import com.houseclash.backend.domain.port.CardRepository
 
 class CardRepositoryTester : CardRepository {
@@ -21,13 +20,6 @@ class CardRepositoryTester : CardRepository {
 
     override fun findByUserId(userId: Long): List<Card> {
         return cards.filter { it.userId == userId }
-    }
-
-    override fun findByUserIdAndType(
-        userId: Long,
-        type: CardType
-    ): List<Card> {
-        return cards.filter { it.userId == userId && it.type == type }
     }
 
     override fun deleteByUserId(userId: Long) {
