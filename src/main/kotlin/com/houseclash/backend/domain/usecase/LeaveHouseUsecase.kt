@@ -17,18 +17,24 @@ class LeaveHouseUsecase(
 ) {
     fun execute(userId: Long): User {
         val user = userRepository.findById(userId)
-        requireNotNull(user) { "User does not exist." }
+        require(user != null) { "User does not exist." }
 
         val houseId = user.houseId
-        requireNotNull(houseId) { "User doesn't belong to a house" }
+        require(houseId != null) { "User doesn't belong to a house" }
+
+        val house = houseRepository.findById(houseId)
+        require(house != null) { "House does not exist." }
 
         val houseMembers = userRepository.findByHouseId(houseId)
         val isLastMember = houseMembers.size == 1 && houseMembers.first().id == userId
+        val isCaptain = house.createdBy == userId
+        require(!isCaptain || isLastMember) { "The captain cannot leave the house while other members remain. Transfer ownership first." }
+
 
         if (isLastMember) {
             taskRepository.deleteByHouseId(houseId)
             categoryRepository.deleteByHouseId(houseId)
-            houseRepository.delete(houseRepository.findById(houseId)!!)
+            houseRepository.delete(house)
         } else {
             val userTasks = taskRepository.findByAssignedTo(userId)
             userTasks.forEach { task ->

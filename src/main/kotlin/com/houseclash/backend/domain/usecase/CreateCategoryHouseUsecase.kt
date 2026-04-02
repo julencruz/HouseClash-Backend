@@ -11,11 +11,13 @@ class CreateCategoryHouseUsecase(
     private val userRepository: UserRepository
 ) {
     fun execute(userId: Long, houseId: Long, name: String, description: String? = null): Category {
-        requireNotNull(houseRepository.findById(houseId)) { "House not found for id: $houseId" }
+        val house = houseRepository.findById(houseId)
+        require(house != null) { "House not found for id: $houseId" }
 
         val user = userRepository.findById(userId)
-        requireNotNull(user) { "User not found" }
+        require(user != null) { "User not found" }
         require(user.houseId == houseId) { "User does not belong to this house" }
+        require(house.createdBy == userId) { "Only the house captain can create categories." }
 
         val existingCategories = categoryRepository.findByHouseId(houseId)
         require(existingCategories.none { it.name.equals(name, ignoreCase = true) })
