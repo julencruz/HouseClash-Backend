@@ -25,6 +25,7 @@ services:
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
       JWT_SECRET: ${JWT_SECRET}
+      SWAGGER_PASSWORD: ${SWAGGER_PASSWORD}
     ports:
       - "8080:8080"
     depends_on:
