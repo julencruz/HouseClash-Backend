@@ -1,5 +1,7 @@
 package com.houseclash.backend.infrastructure.web.category
 import com.houseclash.backend.domain.usecase.*
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/categories")
+@Tag(name = "Categories", description = "Gestió de les categories de tasques de la llar")
 class CategoryController(
     private val getHouseCategoriesUsecase: GetHouseCategoriesUsecase,
     private val createCategoryHouseUsecase: CreateCategoryHouseUsecase,
@@ -16,6 +19,7 @@ class CategoryController(
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
+    @Operation(summary = "Obtenir categories de la llar", description = "Retorna totes les categories de tasques de la llar a la qual pertany l'usuari autenticat")
     @GetMapping
     fun getCategories(authentication: Authentication): ResponseEntity<List<CategoryResponse>> {
         val userId = authentication.principal as Long
@@ -25,6 +29,7 @@ class CategoryController(
         return ResponseEntity.ok(categories.map { it.toResponse() })
     }
 
+    @Operation(summary = "Crear categoria", description = "Crea una nova categoria per organitzar les tasques de la llar. Només membres de la llar poden crear categories")
     @PostMapping
     fun create(
         @RequestBody request: CreateCategoryRequest,
@@ -37,6 +42,7 @@ class CategoryController(
         return ResponseEntity.status(HttpStatus.CREATED).body(category.toResponse())
     }
 
+    @Operation(summary = "Actualitzar categoria", description = "Modifica el nom d'una categoria existent de la llar")
     @PatchMapping("/{categoryId}")
     fun update(
         @PathVariable categoryId: Long,
@@ -50,6 +56,7 @@ class CategoryController(
         return ResponseEntity.ok(category.toResponse())
     }
 
+    @Operation(summary = "Eliminar categoria", description = "Elimina una categoria de la llar. Les tasques associades quedaran sense categoria")
     @DeleteMapping("/{categoryId}")
     fun delete(
         @PathVariable categoryId: Long,

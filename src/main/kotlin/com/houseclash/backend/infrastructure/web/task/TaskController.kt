@@ -2,6 +2,8 @@ package com.houseclash.backend.infrastructure.web.task
 
 import com.houseclash.backend.domain.model.Recurrence
 import com.houseclash.backend.domain.usecase.*
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/tasks")
+@Tag(name = "Tasques", description = "Gestió de les tasques de la llar")
 class TaskController(
     private val getActiveTasksUsecase: GetActiveTasksUsecase,
     private val createTaskUsecase: CreateTaskUsecase,
@@ -22,6 +25,7 @@ class TaskController(
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
+    @Operation(summary = "Obtenir tasques actives", description = "Retorna totes les tasques actives de la llar a la qual pertany l'usuari autenticat")
     @GetMapping
     fun getActiveTasks(authentication: Authentication): ResponseEntity<List<TaskResponse>> {
         val userId = authentication.principal as Long
@@ -31,6 +35,7 @@ class TaskController(
         return ResponseEntity.ok(tasks.map { it.toResponse() })
     }
 
+    @Operation(summary = "Crear tasca", description = "Crea una nova tasca a la llar indicada. Es pot assignar una categoria i definir la recurrència")
     @PostMapping
     fun create(
         @RequestBody request: CreateTaskRequest,
@@ -51,6 +56,7 @@ class TaskController(
         return ResponseEntity.status(HttpStatus.CREATED).body(task.toResponse())
     }
 
+    @Operation(summary = "Actualitzar tasca", description = "Modifica el títol, la descripció, l'esforç, la recurrència o la categoria d'una tasca existent")
     @PatchMapping("/{taskId}")
     fun update(
         @PathVariable taskId: Long,
@@ -72,6 +78,7 @@ class TaskController(
         return ResponseEntity.ok(task.toResponse())
     }
 
+    @Operation(summary = "Eliminar tasca", description = "Elimina permanentment una tasca. Només ho pot fer el creador o un membre amb permisos de la llar")
     @DeleteMapping("/{taskId}")
     fun delete(
         @PathVariable taskId: Long,
@@ -84,6 +91,7 @@ class TaskController(
         return ResponseEntity.noContent().build()
     }
 
+    @Operation(summary = "Assignar-se una tasca", description = "L'usuari autenticat s'assigna a ell mateix la tasca indicada per fer-se'n responsable")
     @PostMapping("/{taskId}/assign")
     fun assign(
         @PathVariable taskId: Long,
@@ -96,6 +104,7 @@ class TaskController(
         return ResponseEntity.ok(task.toResponse())
     }
 
+    @Operation(summary = "Desassignar-se d'una tasca", description = "L'usuari autenticat es desassigna de la tasca indicada, deixant-la disponible per a altres membres")
     @PostMapping("/{taskId}/unassign")
     fun unassign(
         @PathVariable taskId: Long,
@@ -108,6 +117,7 @@ class TaskController(
         return ResponseEntity.ok(task.toResponse())
     }
 
+    @Operation(summary = "Marcar tasca com a completada", description = "L'usuari assignat marca la tasca com a completada. Queda pendent de validació per part d'un altre membre")
     @PostMapping("/{taskId}/complete")
     fun complete(
         @PathVariable taskId: Long
@@ -118,6 +128,7 @@ class TaskController(
         return ResponseEntity.ok(task.toResponse())
     }
 
+    @Operation(summary = "Validar tasca completada", description = "Un membre de la llar aprova o rebutja una tasca marcada com a completada. La decisió pot ser APPROVED o REJECTED")
     @PostMapping("/{taskId}/validate")
     fun validate(
         @PathVariable taskId: Long,
