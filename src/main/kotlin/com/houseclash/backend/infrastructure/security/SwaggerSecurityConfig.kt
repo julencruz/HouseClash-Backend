@@ -1,43 +1,52 @@
 package com.houseclash.backend.infrastructure.security
 
+import jakarta.servlet.FilterChain
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
+import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
-import org.springframework.security.authentication.ProviderManager
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider
-import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.core.userdetails.User
-import org.springframework.security.provisioning.InMemoryUserDetailsManager
-import org.springframework.security.web.SecurityFilterChain
+import org.springframework.stereotype.Component
+import org.springframework.web.filter.OncePerRequestFilter
+import java.util.Base64
 
-@Configuration
-@EnableWebSecurity
-class SwaggerSecurityConfig {
+@Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
+class SwaggerBasicAuthFilter : OncePerRequestFilter() {
 
     @Value("\${app.swagger.password}")
     private lateinit var swaggerPassword: String
 
-    @Bean
-    @Order(1)
-    fun swaggerSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        val userDetails = User.withUsername("admin")
-            .password("{noop}$swaggerPassword")
-            .roles("SWAGGER")
-            .build()
+    private val swaggerPaths = listOf("/swagger-ui", "/v3/api-docs", "/webjars")
 
-        val authManager = ProviderManager(
-            DaoAuthenticationProvider(InMemoryUserDetailsManager(userDetails))
-        )
+    override fun doFilterInternal(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        filterChain: FilterChain
+    ) {
+        val uri = request.requestURI
+        val isSwaggerPath = uri == "/swagger-ui.html" || swaggerPaths.any { uri.startsWith(it) }
 
-        http
-            .securityMatcher("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**")
-            .authenticationManager(authManager)
-            .authorizeHttpRequests { it.anyRequest().authenticated() }
-            .httpBasic { }
-            .csrf { it.disable() }
+        if (!isSwaggerPath) {
+            filterChain.doFilter(request, response)
+            return
+        }
 
-        return http.build()
+        val authHeader = request.getHeader("Authorization")
+        if (authHeader != null && authHeader.startsWith("Basic ")) {
+            val decoded = String(Base64.getDecoder().decode(authHeader.substring(6)))
+            val colonIndex = decoded.indexOf(':')
+            if (colonIndex > 0) {
+                val username = decoded.substring(0, colonIndex)
+                val password = decoded.substring(colonIndex + 1)
+                if (username == "admin" && password == swaggerPassword) {
+                    filterChain.doFilter(request, response)
+                    return
+                }
+            }
+        }
+
+        response.status = HttpServletResponse.SC_UNAUTHORIZED
+        response.setHeader("WWW-Authenticate", "Basic realm=\"HouseClash Swagger\"")
     }
 }

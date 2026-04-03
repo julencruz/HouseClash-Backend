@@ -18,7 +18,10 @@ class SecurityConfig(
         http
             .csrf { it.disable() }
             .authorizeHttpRequests { auth ->
-                auth.requestMatchers("/api/users/register", "/api/users/login").permitAll()
+                auth.requestMatchers(
+                    "/api/users/register", "/api/users/login",
+                    "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/webjars/**"
+                ).permitAll()
                 auth.anyRequest().authenticated()
             }
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
