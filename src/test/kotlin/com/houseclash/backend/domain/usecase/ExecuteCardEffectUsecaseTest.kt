@@ -47,14 +47,20 @@ class ExecuteCardEffectUsecaseTest {
     // --- STEAL_KUDOS ---
 
     @Test
-    fun `STEAL_KUDOS should transfer 5 kudos from target to executor`() {
+    fun `STEAL_KUDOS should transfer between 1 and 6 kudos from target to executor`() {
         val card = saveCard(CardType.STEAL_KUDOS)
         usecase.execute(card.id!!, updatedExecutor.id!!, targetUserId = updatedTarget.id!!)
 
         val executorAfter = userRepository.findById(updatedExecutor.id)!!
         val targetAfter = userRepository.findById(updatedTarget.id)!!
-        assertEquals(55, executorAfter.kudosBalance)
-        assertEquals(15, targetAfter.kudosBalance)
+
+        val stolen = executorAfter.kudosBalance - updatedExecutor.kudosBalance
+        assertTrue(stolen in 1..6, "Stolen amount should be between 1 and 6, but was $stolen")
+        assertEquals(updatedTarget.kudosBalance - stolen, targetAfter.kudosBalance)
+        assertEquals(
+            updatedExecutor.kudosBalance + updatedTarget.kudosBalance,
+            executorAfter.kudosBalance + targetAfter.kudosBalance
+        )
     }
 
     @Test
