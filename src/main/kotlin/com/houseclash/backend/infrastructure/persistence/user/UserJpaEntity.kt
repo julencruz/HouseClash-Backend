@@ -27,6 +27,11 @@ class UserJpaEntity(
     @Column(nullable = false)
     val kudosBalance: Int = 0,
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_visited_houses", joinColumns = [JoinColumn(name = "user_id")])
+    @Column(name = "house_id")
+    val visitedHouseIds: Set<Long> = emptySet(),
+
     @Column(nullable = false, updatable = false)
     val createdAt: LocalDateTime = LocalDateTime.now()
 )
@@ -39,6 +44,7 @@ fun UserJpaEntity.toDomain(): User {
         passwordHash = this.passwordHash,
         kudosBalance = this.kudosBalance,
         houseId = this.houseId,
+        visitedHouseIds = this.visitedHouseIds,
         createdAt = this.createdAt
     )
 }
@@ -51,6 +57,7 @@ fun User.toEntity(): UserJpaEntity {
         passwordHash = this.passwordHash,
         houseId = this.houseId,
         kudosBalance = this.kudosBalance,
+        visitedHouseIds = this.visitedHouseIds,
         createdAt = this.createdAt
     )
 }

@@ -9,6 +9,7 @@ data class User(
     val passwordHash: String,
     val kudosBalance: Int = 0,
     val houseId: Long? = null,
+    val visitedHouseIds: Set<Long> = emptySet(),
     val createdAt: LocalDateTime = LocalDateTime.now()
 ) {
     companion object {
@@ -26,8 +27,13 @@ data class User(
 
     fun joinHouse(houseId: Long): User {
         require(this.houseId == null) { "User already belongs to a house" }
-        return this.copy(houseId = houseId)
+        return this.copy(
+            houseId = houseId,
+            visitedHouseIds = visitedHouseIds + houseId
+        )
     }
+
+    fun hasVisitedHouse(houseId: Long): Boolean = houseId in visitedHouseIds
 
     fun leaveHouse(houseId: Long): User {
         require(this.houseId == houseId) { "User is not in this house" }
