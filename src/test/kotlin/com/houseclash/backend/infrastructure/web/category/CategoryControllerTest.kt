@@ -20,7 +20,7 @@ class CategoryControllerTest {
     private val activityLogRepository = ActivityLogRepositoryTester()
 
     private val registerUserUsecase = RegisterUserUsecase(userRepository, passwordEncoder)
-    private val createHouseUsecase = CreateHouseUsecase(userRepository, houseRepository)
+    private val createHouseUsecase = CreateHouseUsecase(userRepository, houseRepository, categoryRepository)
     private val joinHouseUsecase = JoinHouseUsecase(userRepository, houseRepository, activityLogRepository)
     private val getHouseCategoriesUsecase = GetHouseCategoriesUsecase(userRepository, categoryRepository)
     private val createCategoryHouseUsecase = CreateCategoryHouseUsecase(houseRepository, categoryRepository, userRepository)

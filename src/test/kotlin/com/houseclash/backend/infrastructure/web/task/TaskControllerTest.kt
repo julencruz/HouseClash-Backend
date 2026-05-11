@@ -23,7 +23,7 @@ class TaskControllerTest {
     private val activityLogRepository = ActivityLogRepositoryTester()
 
     private val registerUserUsecase = RegisterUserUsecase(userRepository, passwordEncoder)
-    private val createHouseUsecase = CreateHouseUsecase(userRepository, houseRepository)
+    private val createHouseUsecase = CreateHouseUsecase(userRepository, houseRepository, categoryRepository)
     private val joinHouseUsecase = JoinHouseUsecase(userRepository, houseRepository, activityLogRepository)
     private val getActiveTasksUsecase = GetActiveTasksUsecase(userRepository, taskRepository)
     private val createTaskUsecase = CreateTaskUsecase(taskRepository, houseRepository, categoryRepository, userRepository, activityLogRepository)

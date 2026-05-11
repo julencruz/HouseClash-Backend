@@ -17,11 +17,12 @@ class CardControllerTest {
     private val houseRepository = HouseRepositoryTester()
     private val cardRepository = CardRepositoryTester()
     private val taskRepository = TaskRepositoryTester()
+    private val categoryRepository = CategoryRepositoryTester()
     private val passwordEncoder = PasswordEncoderTester()
     private val activityLogRepository = ActivityLogRepositoryTester()
 
     private val registerUserUsecase = RegisterUserUsecase(userRepository, passwordEncoder)
-    private val createHouseUsecase = CreateHouseUsecase(userRepository, houseRepository)
+    private val createHouseUsecase = CreateHouseUsecase(userRepository, houseRepository, categoryRepository)
     private val joinHouseUsecase = JoinHouseUsecase(userRepository, houseRepository, activityLogRepository)
     private val getUserCardsUsecase = GetUserCardsUsecase(userRepository, cardRepository)
     private val openCardPackUsecase = OpenCardPackUsecase(userRepository, cardRepository)
@@ -84,7 +85,7 @@ class CardControllerTest {
 
     @Test
     fun `should return 200 with exactly 4 cards when user has enough kudos`() {
-        owner = userRepository.save(owner.addKudos(50))
+        // owner already has WELCOME_BONUS_KUDOS (50) from creating the house
 
         val response = controller.openPack(authAs(owner))
 
@@ -94,7 +95,7 @@ class CardControllerTest {
 
     @Test
     fun `should deduct kudos after opening a pack`() {
-        owner = userRepository.save(owner.addKudos(50))
+        // owner already has WELCOME_BONUS_KUDOS (50) from creating the house
 
         controller.openPack(authAs(owner))
 
@@ -104,6 +105,9 @@ class CardControllerTest {
 
     @Test
     fun `should throw when user has insufficient kudos to open a pack`() {
+        // drain the welcome bonus so kudosBalance < PACK_COST
+        owner = userRepository.save(owner.copy(kudosBalance = 0))
+
         assertThrows(IllegalArgumentException::class.java) {
             controller.openPack(authAs(owner))
         }

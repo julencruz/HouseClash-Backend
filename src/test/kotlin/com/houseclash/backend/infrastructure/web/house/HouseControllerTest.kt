@@ -19,7 +19,7 @@ class HouseControllerTest {
     private val activityLogRepository = ActivityLogRepositoryTester()
 
     private val registerUserUsecase = RegisterUserUsecase(userRepository, passwordEncoder)
-    private val createHouseUsecase = CreateHouseUsecase(userRepository, houseRepository)
+    private val createHouseUsecase = CreateHouseUsecase(userRepository, houseRepository, categoryRepository)
     private val getHouseDetailsUsecase = GetHouseDetailsUsecase(userRepository, houseRepository)
     private val joinHouseUsecase = JoinHouseUsecase(userRepository, houseRepository, activityLogRepository)
     private val leaveHouseUsecase = LeaveHouseUsecase(userRepository, taskRepository, cardRepository, houseRepository, categoryRepository)

@@ -10,7 +10,8 @@ class CreateHouseUsecaseTest {
     private val userRepository = UserRepositoryTester()
     private val houseRepository = HouseRepositoryTester()
     private val registerUsecase = RegisterUserUsecase(userRepository, PasswordEncoderTester())
-    private val usecase = CreateHouseUsecase(userRepository, houseRepository)
+    private val categoryRepository = com.houseclash.backend.helper.CategoryRepositoryTester()
+    private val usecase = CreateHouseUsecase(userRepository, houseRepository, categoryRepository)
 
     @Test
     fun `should create house correctly`() {
