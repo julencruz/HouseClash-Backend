@@ -208,4 +208,8 @@ class BeanConfig {
         activityLogRepository: ActivityLogRepository,
         taskRepository: TaskRepository
     ) = PurgeActivityLogUsecase(activityLogRepository, taskRepository)
+
+    @Bean
+    fun rotateInviteCodesUsecase(houseRepository: HouseRepository) =
+        RotateInviteCodesUsecase(houseRepository)
 }

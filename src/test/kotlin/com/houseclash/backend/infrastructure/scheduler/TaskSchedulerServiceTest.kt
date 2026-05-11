@@ -8,6 +8,7 @@ import com.houseclash.backend.domain.usecase.ApplyMarketInflationUsecase
 import com.houseclash.backend.domain.usecase.AutoApproveExpiredTasksUsecase
 import com.houseclash.backend.domain.usecase.PurgeActivityLogUsecase
 import com.houseclash.backend.domain.usecase.RecurringTaskSchedulerUsecase
+import com.houseclash.backend.domain.usecase.RotateInviteCodesUsecase
 import com.houseclash.backend.helper.HouseRepositoryTester
 import com.houseclash.backend.helper.TaskRepositoryTester
 import com.houseclash.backend.helper.TestDataFactory
@@ -31,12 +32,14 @@ class TaskSchedulerServiceTest {
     private val autoApproveExpiredTasksUsecase = AutoApproveExpiredTasksUsecase(taskRepository, userRepository, activityLogRepository)
     private val applyMarketInflationUsecase = ApplyMarketInflationUsecase(taskRepository, activityLogRepository)
     private val purgeActivityLogUsecase = PurgeActivityLogUsecase(activityLogRepository, taskRepository)
+    private val rotateInviteCodesUsecase = RotateInviteCodesUsecase(houseRepository)
 
     private val scheduler = TaskSchedulerService(
         recurringTaskSchedulerUsecase,
         autoApproveExpiredTasksUsecase,
         applyMarketInflationUsecase,
         purgeActivityLogUsecase,
+        rotateInviteCodesUsecase,
         houseRepository
     )
 

@@ -39,4 +39,8 @@ data class House(
     fun transferOwnership(newOwnerId: Long): House {
         return this.copy(createdBy = newOwnerId)
     }
+
+    fun regenerateInviteCode(): House {
+        return this.copy(inviteCode = generateInviteCode())
+    }
 }

@@ -5,6 +5,7 @@ import com.houseclash.backend.domain.usecase.ApplyMarketInflationUsecase
 import com.houseclash.backend.domain.usecase.AutoApproveExpiredTasksUsecase
 import com.houseclash.backend.domain.usecase.PurgeActivityLogUsecase
 import com.houseclash.backend.domain.usecase.RecurringTaskSchedulerUsecase
+import com.houseclash.backend.domain.usecase.RotateInviteCodesUsecase
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
@@ -16,6 +17,7 @@ class TaskSchedulerService(
     private val autoApproveExpiredTasksUsecase: AutoApproveExpiredTasksUsecase,
     private val applyMarketInflationUsecase: ApplyMarketInflationUsecase,
     private val purgeActivityLogUsecase: PurgeActivityLogUsecase,
+    private val rotateInviteCodesUsecase: RotateInviteCodesUsecase,
     private val houseRepository: HouseRepository
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
@@ -58,5 +60,12 @@ class TaskSchedulerService(
             purgeActivityLogUsecase.execute(house.id!!)
         }
         logger.info("Scheduler: activity log purge completed")
+    }
+
+    @Scheduled(timeUnit = TimeUnit.HOURS, fixedRate = 72)
+    fun rotateInviteCodes() {
+        logger.info("Scheduler: rotating invite codes for all houses")
+        rotateInviteCodesUsecase.execute()
+        logger.info("Scheduler: invite codes rotated")
     }
 }
