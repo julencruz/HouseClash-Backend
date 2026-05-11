@@ -28,4 +28,3 @@ class RotateInviteCodesUsecaseTest {
         assertNotEquals(house2.inviteCode, updatedHouse2.inviteCode)
     }
 }
-
