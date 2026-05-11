@@ -2,6 +2,8 @@ package com.houseclash.backend.infrastructure.persistence.user
 
 import com.houseclash.backend.domain.model.User
 import jakarta.persistence.*
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 import java.time.LocalDateTime
 
 @Entity
@@ -29,6 +31,7 @@ class UserJpaEntity(
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_visited_houses", joinColumns = [JoinColumn(name = "user_id")])
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @Column(name = "house_id")
     val visitedHouseIds: Set<Long> = emptySet(),
 
