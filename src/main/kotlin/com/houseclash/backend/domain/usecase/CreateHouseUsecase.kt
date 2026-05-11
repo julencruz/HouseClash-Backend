@@ -1,14 +1,17 @@
 package com.houseclash.backend.domain.usecase
 
+import com.houseclash.backend.domain.model.Category
 import com.houseclash.backend.domain.model.House
+import com.houseclash.backend.domain.port.CategoryRepository
 import com.houseclash.backend.domain.port.HouseRepository
 import com.houseclash.backend.domain.port.UserRepository
 
-class CreateHouseUsecase (
-    private val userRepository : UserRepository,
+class CreateHouseUsecase(
+    private val userRepository: UserRepository,
     private val houseRepository: HouseRepository,
+    private val categoryRepository: CategoryRepository,
 ) {
-    fun execute(userId: Long, name: String, description: String = "") : House{
+    fun execute(userId: Long, name: String, description: String = ""): House {
         val user = userRepository.findById(userId)
         require(user != null) { "User does not exist." }
         require(user.houseId == null) { "User is already a member of a house" }
@@ -20,6 +23,7 @@ class CreateHouseUsecase (
         val savedHouse = houseRepository.save(newHouse)
         val joinedUser = user.joinHouse(savedHouse.id!!)
         userRepository.save(joinedUser.addKudos(JoinHouseUsecase.WELCOME_BONUS_KUDOS))
+        categoryRepository.save(Category.createDefault(savedHouse.id))
         return savedHouse
     }
 }

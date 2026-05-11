@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository
 interface SpringDataCategoryRepository : JpaRepository<CategoryJpaEntity, Long> {
 
     fun findByHouseId(houseId: Long): List<CategoryJpaEntity>
+    fun findByHouseIdAndIsDefault(houseId: Long, isDefault: Boolean): CategoryJpaEntity?
     fun deleteByHouseId(houseId: Long)
 }

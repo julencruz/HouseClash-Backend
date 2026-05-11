@@ -31,6 +31,10 @@ class CategoryRepositoryTester : CategoryRepository {
         keysToRemove.forEach { categories.remove(it) }
     }
 
+    override fun findDefaultByHouseId(houseId: Long): Category? {
+        return categories.find { it.houseId == houseId && it.isDefault }
+    }
+
     override fun delete(id: Long) {
         categories.removeIf { it.id == id }
     }

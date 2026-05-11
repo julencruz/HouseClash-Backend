@@ -17,6 +17,7 @@ class DeleteCategoryUsecase(
 
         val category = categoryRepository.findById(categoryId)
         require(category != null) { "Category not found" }
+        require(!category.isDefault) { "The default category cannot be deleted" }
         require(category.houseId == user.houseId) { "Cannot delete categories outside your house" }
 
         val house = houseRepository.findById(category.houseId)
@@ -24,8 +25,12 @@ class DeleteCategoryUsecase(
         require(house.createdBy == userId) { "Only the house captain can delete categories." }
 
         val tasksInCategory = taskRepository.findByCategoryId(categoryId)
-        require(tasksInCategory.isEmpty()) {
-            "Cannot delete a category that contains tasks. Move or delete the tasks first."
+        if (tasksInCategory.isNotEmpty()) {
+            val defaultCategory = categoryRepository.findDefaultByHouseId(category.houseId)
+            requireNotNull(defaultCategory) { "Default category not found for this house" }
+            tasksInCategory.forEach { task ->
+                taskRepository.save(task.copy(categoryId = defaultCategory.id!!))
+            }
         }
 
         categoryRepository.delete(categoryId)

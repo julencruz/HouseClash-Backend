@@ -16,12 +16,14 @@ data class CategoryResponse(
     val id: Long,
     val houseId: Long,
     val name: String,
-    val description: String?
+    val description: String?,
+    val isDefault: Boolean,
 )
 
 fun Category.toResponse() = CategoryResponse(
     id = this.id!!,
     houseId = this.houseId,
     name = this.name,
-    description = this.description
+    description = this.description,
+    isDefault = this.isDefault,
 )

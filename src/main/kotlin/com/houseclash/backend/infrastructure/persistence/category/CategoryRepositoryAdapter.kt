@@ -29,4 +29,8 @@ class CategoryRepositoryAdapter(
     override fun deleteByHouseId(houseId: Long) {
         jpaRepository.deleteByHouseId(houseId)
     }
+
+    override fun findDefaultByHouseId(houseId: Long): Category? {
+        return jpaRepository.findByHouseIdAndIsDefault(houseId, true)?.toDomain()
+    }
 }

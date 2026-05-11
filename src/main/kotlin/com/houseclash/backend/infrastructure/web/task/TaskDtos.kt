@@ -15,7 +15,7 @@ data class CreateTaskRequest(
     val recurrence: String? = null,
     val deadline: LocalDateTime? = null,
     val houseId: Long,
-    val categoryId: Long
+    val categoryId: Long? = null
 )
 
 data class UpdateTaskRequest(

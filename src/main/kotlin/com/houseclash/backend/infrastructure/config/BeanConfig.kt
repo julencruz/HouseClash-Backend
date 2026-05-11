@@ -29,8 +29,8 @@ class BeanConfig {
     // ---- House ----
 
     @Bean
-    fun createHouseUsecase(userRepository: UserRepository, houseRepository: HouseRepository) =
-        CreateHouseUsecase(userRepository, houseRepository)
+    fun createHouseUsecase(userRepository: UserRepository, houseRepository: HouseRepository, categoryRepository: CategoryRepository) =
+        CreateHouseUsecase(userRepository, houseRepository, categoryRepository)
 
     @Bean
     fun getHouseDetailsUsecase(userRepository: UserRepository, houseRepository: HouseRepository) =

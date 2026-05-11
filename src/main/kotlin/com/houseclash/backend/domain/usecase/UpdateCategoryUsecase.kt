@@ -15,6 +15,7 @@ class UpdateCategoryUsecase(
         require(user != null) { "User does not exist" }
         val category = categoryRepository.findById(categoryId)
         require(category != null) { "Category does not exist" }
+        require(!category.isDefault) { "The default category cannot be renamed" }
         require(category.houseId == user.houseId) { "Cannot update categories outside your house" }
 
         val house = houseRepository.findById(category.houseId)

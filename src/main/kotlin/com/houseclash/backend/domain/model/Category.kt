@@ -5,11 +5,16 @@ data class Category(
     val houseId: Long,
     val name: String,
     val description: String? = null,
+    val isDefault: Boolean = false,
 ) {
     companion object {
         fun create(houseId: Long, name: String, description: String? = null): Category {
             require(name.isNotBlank()) { "Category name cannot be blank" }
             return Category(houseId = houseId, name = name, description = description)
+        }
+
+        fun createDefault(houseId: Long): Category {
+            return Category(houseId = houseId, name = "Uncategorized", isDefault = true)
         }
     }
 

@@ -6,6 +6,7 @@ interface CategoryRepository {
     fun save(category: Category): Category
     fun findById(id: Long): Category?
     fun findByHouseId(houseId: Long): List<Category>
+    fun findDefaultByHouseId(houseId: Long): Category?
     fun deleteByHouseId(houseId: Long)
     fun delete(id: Long)
 }

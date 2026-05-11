@@ -19,17 +19,25 @@ class CreateTaskUsecase (
     private val userRepository: UserRepository,
     private val activityLogRepository: ActivityLogRepository,
 ) {
-    fun execute(userId: Long, title: String, description: String? = null, effort: Effort, recurrence: Recurrence? = null, deadline: LocalDateTime? = null, houseId: Long, categoryId: Long): Task {
+    fun execute(userId: Long, title: String, description: String? = null, effort: Effort, recurrence: Recurrence? = null, deadline: LocalDateTime? = null, houseId: Long, categoryId: Long? = null): Task {
         val user = userRepository.findById(userId)
         require(user != null) { "User not found" }
         require(user.houseId == houseId) { "User does not belong to this house" }
 
         require(houseRepository.findById(houseId) != null) { "House not found for id: $houseId" }
-        val category = categoryRepository.findById(categoryId)
-        require(category != null) { "Category doesnt exist" }
-        require(category.houseId == houseId) { "Category does not belong to house: $houseId" }
 
-        val task = taskRepository.save(Task.create(title, description, effort, recurrence, deadline, houseId, categoryId))
+        val resolvedCategoryId: Long = if (categoryId != null) {
+            val category = categoryRepository.findById(categoryId)
+            require(category != null) { "Category doesnt exist" }
+            require(category.houseId == houseId) { "Category does not belong to house: $houseId" }
+            categoryId
+        } else {
+            val defaultCategory = categoryRepository.findDefaultByHouseId(houseId)
+            requireNotNull(defaultCategory) { "No default category found for house: $houseId" }
+            defaultCategory.id!!
+        }
+
+        val task = taskRepository.save(Task.create(title, description, effort, recurrence, deadline, houseId, resolvedCategoryId))
 
         activityLogRepository.save(ActivityLog(
             houseId = houseId,

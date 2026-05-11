@@ -17,14 +17,18 @@ class CategoryJpaEntity(
     val name: String = "",
 
     @Column(name = "house_id", nullable = false)
-    val houseId: Long = 0L
+    val houseId: Long = 0L,
+
+    @Column(name = "is_default", nullable = false)
+    val isDefault: Boolean = false,
 )
 
 fun CategoryJpaEntity.toDomain(): Category {
     return Category(
         id = this.id,
         name = this.name,
-        houseId = this.houseId
+        houseId = this.houseId,
+        isDefault = this.isDefault,
     )
 }
 
@@ -32,6 +36,7 @@ fun Category.toEntity(): CategoryJpaEntity {
     return CategoryJpaEntity(
         id = this.id,
         name = this.name,
-        houseId = this.houseId
+        houseId = this.houseId,
+        isDefault = this.isDefault,
     )
 }
