@@ -48,11 +48,12 @@ class CategoryControllerTest {
     // ---- getCategories ----
 
     @Test
-    fun `should return 200 with empty list when house has no categories`() {
+    fun `should return 200 with only the default category when no extra categories are created`() {
         val response = controller.getCategories(captainAuth())
 
         assertEquals(HttpStatus.OK, response.statusCode)
-        assertTrue(response.body!!.isEmpty())
+        assertEquals(1, response.body!!.size)
+        assertTrue(response.body!!.first().isDefault)
     }
 
     @Test
@@ -63,7 +64,7 @@ class CategoryControllerTest {
         val response = controller.getCategories(captainAuth())
 
         assertEquals(HttpStatus.OK, response.statusCode)
-        assertEquals(2, response.body?.size)
+        assertEquals(3, response.body?.size) // 1 default + 2 created
     }
 
     @Test
@@ -179,9 +180,9 @@ class CategoryControllerTest {
     }
 
     @Test
-    fun `should throw when deleting a category that has tasks`() {
+    fun `should return 204 and migrate tasks to default category when deleting a category that has tasks`() {
         val category = createCategoryHouseUsecase.execute(captain.id!!, house.id!!, "Kitchen")
-        taskRepository.save(
+        val task = taskRepository.save(
             com.houseclash.backend.domain.model.Task.create(
                 title = "Clean stove",
                 description = null,
@@ -192,9 +193,13 @@ class CategoryControllerTest {
             )
         )
 
-        assertThrows(IllegalArgumentException::class.java) {
-            controller.delete(category.id, captainAuth())
-        }
+        val response = controller.delete(category.id, captainAuth())
+
+        assertEquals(HttpStatus.NO_CONTENT, response.statusCode)
+        assertNull(categoryRepository.findById(category.id))
+        val defaultCategory = categoryRepository.findDefaultByHouseId(house.id!!)
+        assertNotNull(defaultCategory)
+        assertEquals(defaultCategory!!.id, taskRepository.findById(task.id!!)?.categoryId)
     }
 
     @Test
