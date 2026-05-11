@@ -18,7 +18,8 @@ class CreateHouseUsecase (
             newHouse = House.create(userId, name, description)
         } while (houseRepository.findByInviteCode(newHouse.inviteCode) != null)
         val savedHouse = houseRepository.save(newHouse)
-        userRepository.save(user.joinHouse(savedHouse.id!!))
+        val joinedUser = user.joinHouse(savedHouse.id!!)
+        userRepository.save(joinedUser.addKudos(JoinHouseUsecase.WELCOME_BONUS_KUDOS))
         return savedHouse
     }
 }
