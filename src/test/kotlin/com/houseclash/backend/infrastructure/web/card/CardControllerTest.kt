@@ -27,11 +27,13 @@ class CardControllerTest {
     private val getUserCardsUsecase = GetUserCardsUsecase(userRepository, cardRepository)
     private val openCardPackUsecase = OpenCardPackUsecase(userRepository, cardRepository)
     private val executeCardEffectUsecase = ExecuteCardEffectUsecase(cardRepository, userRepository, taskRepository, activityLogRepository)
+    private val getHouseCategoriesUsecase = GetHouseCategoriesUsecase(userRepository, categoryRepository)
 
     private val controller = CardController(
         getUserCardsUsecase,
         openCardPackUsecase,
-        executeCardEffectUsecase
+        executeCardEffectUsecase,
+        getHouseCategoriesUsecase
     )
 
     private lateinit var owner: User

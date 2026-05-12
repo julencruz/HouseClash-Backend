@@ -2,6 +2,7 @@ package com.houseclash.backend.infrastructure.web.card
 
 import com.houseclash.backend.domain.model.Card
 import com.houseclash.backend.domain.model.CardType
+import com.houseclash.backend.domain.model.Category
 import com.houseclash.backend.domain.model.cardlogic.CardEffectResult
 import com.houseclash.backend.infrastructure.web.task.TaskResponse
 import com.houseclash.backend.infrastructure.web.task.toResponse
@@ -41,8 +42,8 @@ fun Card.toResponse() = CardResponse(
     acquiredAt = this.acquiredAt
 )
 
-fun CardEffectResult.toResponse() = CardEffectResultResponse(
+fun CardEffectResult.toResponse(categoryMap: Map<Long, Category>) = CardEffectResultResponse(
     description = this.description,
     updatedUsers = this.updatedUsers.map { it.toResponse() },
-    updatedTasks = this.updatedTasks.map { it.toResponse() }
+    updatedTasks = this.updatedTasks.map { it.toResponse(categoryMap.getValue(it.categoryId)) }
 )

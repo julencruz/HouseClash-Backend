@@ -26,6 +26,7 @@ class TaskControllerTest {
     private val createHouseUsecase = CreateHouseUsecase(userRepository, houseRepository, categoryRepository)
     private val joinHouseUsecase = JoinHouseUsecase(userRepository, houseRepository, activityLogRepository)
     private val getActiveTasksUsecase = GetActiveTasksUsecase(userRepository, taskRepository)
+    private val getHouseCategoriesUsecase = GetHouseCategoriesUsecase(userRepository, categoryRepository)
     private val createTaskUsecase = CreateTaskUsecase(taskRepository, houseRepository, categoryRepository, userRepository, activityLogRepository)
     private val updateTaskUsecase = UpdateTaskUsecase(taskRepository, userRepository, categoryRepository)
     private val deleteTaskUsecase = DeleteTaskUsecase(taskRepository, houseRepository)
@@ -36,6 +37,7 @@ class TaskControllerTest {
 
     private val controller = TaskController(
         getActiveTasksUsecase,
+        getHouseCategoriesUsecase,
         createTaskUsecase,
         updateTaskUsecase,
         deleteTaskUsecase,

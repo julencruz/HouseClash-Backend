@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*
 @Tag(name = "Tasques", description = "Gestió de les tasques de la llar")
 class TaskController(
     private val getActiveTasksUsecase: GetActiveTasksUsecase,
+    private val getHouseCategoriesUsecase: GetHouseCategoriesUsecase,
     private val createTaskUsecase: CreateTaskUsecase,
     private val updateTaskUsecase: UpdateTaskUsecase,
     private val deleteTaskUsecase: DeleteTaskUsecase,
@@ -25,14 +26,18 @@ class TaskController(
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
+    private fun categoryMapFor(userId: Long) =
+        getHouseCategoriesUsecase.execute(userId).associateBy { it.id!! }
+
     @Operation(summary = "Obtenir tasques actives", description = "Retorna totes les tasques actives de la llar a la qual pertany l'usuari autenticat")
     @GetMapping
     fun getActiveTasks(authentication: Authentication): ResponseEntity<List<TaskResponse>> {
         val userId = authentication.principal as Long
         logger.info("User {} fetching active tasks", userId)
         val tasks = getActiveTasksUsecase.execute(userId)
+        val categoryMap = categoryMapFor(userId)
         logger.info("Returning {} active tasks for user {}", tasks.size, userId)
-        return ResponseEntity.ok(tasks.map { it.toResponse() })
+        return ResponseEntity.ok(tasks.map { it.toResponse(categoryMap.getValue(it.categoryId)) })
     }
 
     @Operation(summary = "Crear tasca", description = "Crea una nova tasca a la llar indicada. Es pot assignar una categoria i definir la recurrència")
@@ -53,8 +58,9 @@ class TaskController(
             houseId = request.houseId,
             categoryId = request.categoryId
         )
+        val category = categoryMapFor(userId).getValue(task.categoryId)
         logger.info("Task {} created by user {}", task.id, userId)
-        return ResponseEntity.status(HttpStatus.CREATED).body(task.toResponse())
+        return ResponseEntity.status(HttpStatus.CREATED).body(task.toResponse(category))
     }
 
     @Operation(summary = "Actualitzar tasca", description = "Modifica el títol, la descripció, l'esforç, la recurrència o la categoria d'una tasca existent")
@@ -76,8 +82,9 @@ class TaskController(
             deadline = request.deadline,
             categoryId = request.categoryId
         )
+        val category = categoryMapFor(userId).getValue(task.categoryId)
         logger.info("Task {} updated by user {}", taskId, userId)
-        return ResponseEntity.ok(task.toResponse())
+        return ResponseEntity.ok(task.toResponse(category))
     }
 
     @Operation(summary = "Eliminar tasca", description = "Elimina permanentment una tasca. Només ho pot fer el creador o un membre amb permisos de la llar")
@@ -102,8 +109,9 @@ class TaskController(
         val userId = authentication.principal as Long
         logger.info("User {} assigning task {}", userId, taskId)
         val task = assignTaskUsecase.execute(taskId, userId)
+        val category = categoryMapFor(userId).getValue(task.categoryId)
         logger.info("Task {} assigned to user {}", taskId, userId)
-        return ResponseEntity.ok(task.toResponse())
+        return ResponseEntity.ok(task.toResponse(category))
     }
 
     @Operation(summary = "Desassignar-se d'una tasca", description = "L'usuari autenticat es desassigna de la tasca indicada, deixant-la disponible per a altres membres")
@@ -115,8 +123,9 @@ class TaskController(
         val userId = authentication.principal as Long
         logger.info("User {} unassigning from task {}", userId, taskId)
         val task = unassignTaskUsecase.execute(userId, taskId)
+        val category = categoryMapFor(userId).getValue(task.categoryId)
         logger.info("Task {} unassigned by user {}", taskId, userId)
-        return ResponseEntity.ok(task.toResponse())
+        return ResponseEntity.ok(task.toResponse(category))
     }
 
     @Operation(summary = "Marcar tasca com a completada", description = "L'usuari assignat marca la tasca com a completada. Queda pendent de validació per part d'un altre membre")
@@ -128,8 +137,9 @@ class TaskController(
         val userId = authentication.principal as Long
         logger.info("User {} completing task {}", userId, taskId)
         val task = completeTaskUsecase.execute(taskId, userId)
+        val category = categoryMapFor(userId).getValue(task.categoryId)
         logger.info("Task {} marked as completed by user {}", taskId, userId)
-        return ResponseEntity.ok(task.toResponse())
+        return ResponseEntity.ok(task.toResponse(category))
     }
 
     @Operation(summary = "Validar tasca completada", description = "Un membre de la llar aprova o rebutja una tasca marcada com a completada. La decisió pot ser APPROVED o REJECTED")
@@ -143,7 +153,8 @@ class TaskController(
         logger.info("User {} validating task {} with decision '{}'", userId, taskId, request.decision)
         val decision = ValidationDecision.valueOf(request.decision.uppercase())
         val task = validateTaskUsecase.execute(taskId, userId, decision)
+        val category = categoryMapFor(userId).getValue(task.categoryId)
         logger.info("Task {} validated by user {}", taskId, userId)
-        return ResponseEntity.ok(task.toResponse())
+        return ResponseEntity.ok(task.toResponse(category))
     }
 }

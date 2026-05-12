@@ -1,6 +1,7 @@
 package com.houseclash.backend.infrastructure.web.card
 
 import com.houseclash.backend.domain.usecase.ExecuteCardEffectUsecase
+import com.houseclash.backend.domain.usecase.GetHouseCategoriesUsecase
 import com.houseclash.backend.domain.usecase.GetUserCardsUsecase
 import com.houseclash.backend.domain.usecase.OpenCardPackUsecase
 import io.swagger.v3.oas.annotations.Operation
@@ -16,7 +17,8 @@ import org.springframework.web.bind.annotation.*
 class CardController(
     private val getUserCardsUsecase: GetUserCardsUsecase,
     private val openCardPackUsecase: OpenCardPackUsecase,
-    private val executeCardEffectUsecase: ExecuteCardEffectUsecase
+    private val executeCardEffectUsecase: ExecuteCardEffectUsecase,
+    private val getHouseCategoriesUsecase: GetHouseCategoriesUsecase
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
@@ -57,7 +59,8 @@ class CardController(
             targetTaskId = request.targetTaskId,
             targetCategoryId = request.targetCategoryId
         )
+        val categoryMap = getHouseCategoriesUsecase.execute(userId).associateBy { it.id!! }
         logger.info("Card {} effect executed by user {}", cardId, userId)
-        return ResponseEntity.ok(result.toResponse())
+        return ResponseEntity.ok(result.toResponse(categoryMap))
     }
 }

@@ -1,5 +1,6 @@
 package com.houseclash.backend.infrastructure.web.task
 
+import com.houseclash.backend.domain.model.Category
 import com.houseclash.backend.domain.model.Effort
 import com.houseclash.backend.domain.model.Recurrence
 import com.houseclash.backend.domain.model.Task
@@ -33,6 +34,12 @@ data class ValidateTaskRequest(
 
 // --- RESPONSES ---
 
+data class CategorySummary(
+    val id: Long,
+    val name: String,
+    val isDefault: Boolean
+)
+
 data class TaskResponse(
     val id: Long,
     val title: String,
@@ -42,7 +49,7 @@ data class TaskResponse(
     val kudosValue: Int,
     val assignedTo: Long?,
     val houseId: Long,
-    val categoryId: Long,
+    val category: CategorySummary,
     val isForced: Boolean,
     val recurrence: Recurrence?,
     val deadline: LocalDateTime?,
@@ -52,7 +59,7 @@ data class TaskResponse(
 
 // --- MAPPERS ---
 
-fun Task.toResponse() = TaskResponse(
+fun Task.toResponse(category: Category) = TaskResponse(
     id = this.id!!,
     title = this.title,
     description = this.description,
@@ -61,7 +68,11 @@ fun Task.toResponse() = TaskResponse(
     kudosValue = this.kudosValue,
     assignedTo = this.assignedTo,
     houseId = this.houseId,
-    categoryId = this.categoryId,
+    category = CategorySummary(
+        id = category.id!!,
+        name = category.name,
+        isDefault = category.isDefault
+    ),
     isForced = this.isForced,
     recurrence = this.recurrence,
     deadline = this.deadline,
