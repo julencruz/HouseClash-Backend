@@ -2,6 +2,7 @@ package com.houseclash.backend.infrastructure.web.activitylog
 
 import com.houseclash.backend.domain.model.ActivityLogType
 import com.houseclash.backend.domain.usecase.ActivityLogEntry
+import com.houseclash.backend.domain.usecase.PagedActivityLogResult
 import java.time.LocalDateTime
 
 data class ActivityLogResponse(
@@ -34,4 +35,22 @@ fun ActivityLogEntry.toResponse() = ActivityLogResponse(
     kudosValue = log.kudosValue,
     createdAt = log.createdAt,
     isPendingReview = isPendingReview
+)
+
+data class PagedActivityLogResponse(
+    val content: List<ActivityLogResponse>,
+    val page: Int,
+    val size: Int,
+    val totalElements: Long,
+    val totalPages: Int,
+    val isLast: Boolean
+)
+
+fun PagedActivityLogResult.toResponse() = PagedActivityLogResponse(
+    content = content.map { it.toResponse() },
+    page = page,
+    size = size,
+    totalElements = totalElements,
+    totalPages = totalPages,
+    isLast = isLast
 )

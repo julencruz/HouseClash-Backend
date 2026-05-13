@@ -1,6 +1,7 @@
 package com.houseclash.backend.infrastructure.persistence.activitylog
 
 import jakarta.transaction.Transactional
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
@@ -11,6 +12,10 @@ import org.springframework.stereotype.Repository
 interface SpringDataActivityLogRepository : JpaRepository<ActivityLogJpaEntity, Long> {
 
     fun findByHouseIdOrderByCreatedAtAsc(houseId: Long): List<ActivityLogJpaEntity>
+
+    fun findByHouseIdOrderByCreatedAtDesc(houseId: Long, pageable: Pageable): List<ActivityLogJpaEntity>
+
+    fun countByHouseId(houseId: Long): Long
 
     @Modifying
     @Transactional

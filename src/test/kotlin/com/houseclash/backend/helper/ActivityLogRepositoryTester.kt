@@ -18,6 +18,17 @@ class ActivityLogRepositoryTester : ActivityLogRepository {
         return logs.filter { it.houseId == houseId }.sortedBy { it.createdAt }
     }
 
+    override fun findByHouseIdOrderByCreatedAtDesc(houseId: Long, page: Int, size: Int): List<ActivityLog> {
+        val sorted = logs.filter { it.houseId == houseId }.sortedByDescending { it.createdAt }
+        val fromIndex = page * size
+        if (fromIndex >= sorted.size) return emptyList()
+        return sorted.subList(fromIndex, minOf(fromIndex + size, sorted.size))
+    }
+
+    override fun countByHouseId(houseId: Long): Long {
+        return logs.count { it.houseId == houseId }.toLong()
+    }
+
     override fun deleteOldLogsExceptPendingReview(houseId: Long, pendingTaskIds: List<Long>) {
         if (pendingTaskIds.isEmpty()) {
             logs.removeIf { it.houseId == houseId }

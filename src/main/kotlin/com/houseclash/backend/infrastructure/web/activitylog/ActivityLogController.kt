@@ -30,4 +30,21 @@ class ActivityLogController(
         val entries = getActivityLogUsecase.execute(houseId)
         return ResponseEntity.ok(entries.map { it.toResponse() })
     }
+
+    @Operation(
+        summary = "Obtenir el muro de notificaciones paginat",
+        description = "Retorna els events de la llar paginats, ordenats del més recent al més antic. Útil per a carregar el log de forma incremental."
+    )
+    @GetMapping("/paged")
+    fun getActivityLogPaged(
+        @PathVariable houseId: Long,
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "20") size: Int,
+        authentication: Authentication
+    ): ResponseEntity<PagedActivityLogResponse> {
+        val userId = authentication.principal as Long
+        logger.info("User {} fetching paged activity log for house {}, page={}, size={}", userId, houseId, page, size)
+        val result = getActivityLogUsecase.executePaged(houseId, page, size)
+        return ResponseEntity.ok(result.toResponse())
+    }
 }

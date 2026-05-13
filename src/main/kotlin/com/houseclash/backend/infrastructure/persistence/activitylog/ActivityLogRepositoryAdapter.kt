@@ -2,6 +2,7 @@ package com.houseclash.backend.infrastructure.persistence.activitylog
 
 import com.houseclash.backend.domain.model.ActivityLog
 import com.houseclash.backend.domain.port.ActivityLogRepository
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Component
 
 @Component
@@ -15,6 +16,15 @@ class ActivityLogRepositoryAdapter(
 
     override fun findByHouseIdOrderByCreatedAtAsc(houseId: Long): List<ActivityLog> {
         return jpaRepository.findByHouseIdOrderByCreatedAtAsc(houseId).map { it.toDomain() }
+    }
+
+    override fun findByHouseIdOrderByCreatedAtDesc(houseId: Long, page: Int, size: Int): List<ActivityLog> {
+        val pageable = PageRequest.of(page, size)
+        return jpaRepository.findByHouseIdOrderByCreatedAtDesc(houseId, pageable).map { it.toDomain() }
+    }
+
+    override fun countByHouseId(houseId: Long): Long {
+        return jpaRepository.countByHouseId(houseId)
     }
 
     override fun deleteOldLogsExceptPendingReview(houseId: Long, pendingTaskIds: List<Long>) {
