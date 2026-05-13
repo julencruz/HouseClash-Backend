@@ -16,7 +16,8 @@ class UnderdogBoostEffect : CardEffect {
         val updatedTask = lowestTask.applyMarketInflation(3)
         return CardEffectResult(
             updatedTasks = listOf(updatedTask),
-            description = "Task '${lowestTask.title}' received +3 Kudos!"
+            description = "Task '${lowestTask.title}' received +3 Kudos!",
+            kudosValue = 3
         )
     }
 }

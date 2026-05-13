@@ -11,7 +11,8 @@ class MarketBoostEffect : CardEffect {
         val updatedTasks = openTasks.map { it.applyMarketInflation(1) }
         return CardEffectResult(
             updatedTasks = updatedTasks,
-            description = "All open tasks received +1 Kudos!"
+            description = "All open tasks received +1 Kudos!",
+            kudosValue = 1
         )
     }
 }

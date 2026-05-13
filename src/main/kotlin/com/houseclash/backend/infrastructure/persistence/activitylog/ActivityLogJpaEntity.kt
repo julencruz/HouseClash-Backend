@@ -40,6 +40,9 @@ class ActivityLogJpaEntity(
     @Column(name = "card_type")
     val cardType: String? = null,
 
+    @Column(name = "kudos_value")
+    val kudosValue: Int? = null,
+
     @Column(name = "created_at", nullable = false, updatable = false)
     val createdAt: LocalDateTime = LocalDateTime.now()
 )
@@ -55,6 +58,7 @@ fun ActivityLogJpaEntity.toDomain() = ActivityLog(
     taskId = taskId,
     taskTitle = taskTitle,
     cardType = cardType,
+    kudosValue = kudosValue,
     createdAt = createdAt
 )
 
@@ -69,5 +73,6 @@ fun ActivityLog.toEntity() = ActivityLogJpaEntity(
     taskId = taskId,
     taskTitle = taskTitle,
     cardType = cardType,
+    kudosValue = kudosValue,
     createdAt = createdAt
 )

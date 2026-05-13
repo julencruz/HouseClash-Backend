@@ -28,5 +28,6 @@ data class ActivityLog(
     val taskId: Long? = null,
     val taskTitle: String? = null,
     val cardType: String? = null,
+    val kudosValue: Int? = null,
     val createdAt: LocalDateTime = LocalDateTime.now()
 )

@@ -18,7 +18,8 @@ class StealKudosEffect : CardEffect {
 
         return CardEffectResult(
             updatedUsers = listOf(updatedTarget, updatedExecutor),
-            description = "You stole $stealAmount Kudos from ${context.targetUser.username}!"
+            description = "You stole $stealAmount Kudos from ${context.targetUser.username}!",
+            kudosValue = stealAmount
         )
     }
 }

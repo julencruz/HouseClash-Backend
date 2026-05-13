@@ -9,7 +9,8 @@ class HouseBonusEffect : CardEffect {
         val updatedMembers = context.houseMembers.map { it.addKudos(2) }
         return CardEffectResult(
             updatedUsers = updatedMembers,
-            description = "All house members received +2 Kudos!"
+            description = "All house members received +2 Kudos!",
+            kudosValue = 2
         )
     }
 }

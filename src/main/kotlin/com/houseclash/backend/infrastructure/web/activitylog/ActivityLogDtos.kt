@@ -15,6 +15,7 @@ data class ActivityLogResponse(
     val taskId: Long?,
     val taskTitle: String?,
     val cardType: String?,
+    val kudosValue: Int?,
     val createdAt: LocalDateTime,
     val isPendingReview: Boolean
 )
@@ -30,6 +31,7 @@ fun ActivityLogEntry.toResponse() = ActivityLogResponse(
     taskId = log.taskId,
     taskTitle = log.taskTitle,
     cardType = log.cardType,
+    kudosValue = log.kudosValue,
     createdAt = log.createdAt,
     isPendingReview = isPendingReview
 )

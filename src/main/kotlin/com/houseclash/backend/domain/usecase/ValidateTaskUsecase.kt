@@ -45,7 +45,8 @@ class ValidateTaskUsecase (
                     targetUserId = task.assignedTo,
                     targetUsername = assignedUser.username,
                     taskId = task.id,
-                    taskTitle = task.title
+                    taskTitle = task.title,
+                    kudosValue = task.kudosValue
                 ))
 
                 return validatedTask
@@ -62,7 +63,8 @@ class ValidateTaskUsecase (
                     targetUserId = task.assignedTo,
                     targetUsername = assignedUser.username,
                     taskId = task.id,
-                    taskTitle = task.title
+                    taskTitle = task.title,
+                    kudosValue = task.kudosValue
                 ))
 
                 return validatedTask

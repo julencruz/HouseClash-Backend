@@ -29,7 +29,8 @@ class CompleteTaskUsecase (
             actorUserId = userId,
             actorUsername = user.username,
             taskId = task.id,
-            taskTitle = task.title
+            taskTitle = task.title,
+            kudosValue = task.kudosValue
         ))
 
         return completedTask

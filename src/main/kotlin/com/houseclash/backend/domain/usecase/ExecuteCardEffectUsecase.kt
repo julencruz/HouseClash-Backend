@@ -61,7 +61,8 @@ class ExecuteCardEffectUsecase(
             targetUsername = targetUser?.username,
             taskId = targetTask?.id,
             taskTitle = targetTask?.title,
-            cardType = card.type.name
+            cardType = card.type.name,
+            kudosValue = result.kudosValue
         ))
 
         return result

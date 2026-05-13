@@ -17,7 +17,8 @@ class ValueInflationEffect : CardEffect {
         )
         return CardEffectResult(
             updatedTasks = listOf(updatedTask),
-            description = "Task '${context.targetTask.title}' value doubled to ${updatedTask.kudosValue} Kudos!"
+            description = "Task '${context.targetTask.title}' value doubled to ${updatedTask.kudosValue} Kudos!",
+            kudosValue = updatedTask.kudosValue
         )
     }
 }

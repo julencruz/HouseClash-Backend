@@ -31,7 +31,8 @@ class AutoApproveExpiredTasksUsecase(
                 actorUserId = task.assignedTo,
                 actorUsername = user.username,
                 taskId = task.id,
-                taskTitle = task.title
+                taskTitle = task.title,
+                kudosValue = task.kudosValue
             ))
         }
     }

@@ -29,7 +29,7 @@ class CategoryController(
         return ResponseEntity.ok(categories.map { it.toResponse() })
     }
 
-    @Operation(summary = "Crear categoria", description = "Crea una nova categoria per organitzar les tasques de la llar. Només membres de la llar poden crear categories")
+    @Operation(summary = "Crear categoria", description = "Crea una nova categoria per organitzar les tasques de la llar. Només el capitá pot crear categories")
     @PostMapping
     fun create(
         @RequestBody request: CreateCategoryRequest,
@@ -42,7 +42,7 @@ class CategoryController(
         return ResponseEntity.status(HttpStatus.CREATED).body(category.toResponse())
     }
 
-    @Operation(summary = "Actualitzar categoria", description = "Modifica el nom d'una categoria existent de la llar")
+    @Operation(summary = "Actualitzar categoria", description = "Modifica el nom d'una categoria existent de la llar. Només el capità")
     @PatchMapping("/{categoryId}")
     fun update(
         @PathVariable categoryId: Long,
@@ -56,7 +56,7 @@ class CategoryController(
         return ResponseEntity.ok(category.toResponse())
     }
 
-    @Operation(summary = "Eliminar categoria", description = "Elimina una categoria de la llar. Les tasques associades quedaran sense categoria")
+    @Operation(summary = "Eliminar categoria", description = "Elimina una categoria de la llar. Les tasques associades quedaran sense categoria. Només el capità")
     @DeleteMapping("/{categoryId}")
     fun delete(
         @PathVariable categoryId: Long,

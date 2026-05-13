@@ -6,5 +6,6 @@ import com.houseclash.backend.domain.model.User
 data class CardEffectResult (
     val updatedUsers: List<User> = emptyList(),
     val updatedTasks: List<Task> = emptyList(),
-    val description: String = ""
+    val description: String = "",
+    val kudosValue: Int? = null
 )
