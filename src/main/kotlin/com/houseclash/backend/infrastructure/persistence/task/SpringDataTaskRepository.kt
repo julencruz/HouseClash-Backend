@@ -1,6 +1,7 @@
 package com.houseclash.backend.infrastructure.persistence.task
 
 import com.houseclash.backend.domain.model.TaskStatus
+import jakarta.transaction.Transactional
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
@@ -13,6 +14,8 @@ interface SpringDataTaskRepository : JpaRepository<TaskJpaEntity, Long> {
     fun findByHouseIdAndStatus(houseId: Long, status: TaskStatus): List<TaskJpaEntity>
     fun findByAssignedTo(userId: Long): List<TaskJpaEntity>
     fun findByCategoryId(categoryId: Long): List<TaskJpaEntity>
+
+    @Transactional
     fun deleteByHouseId(houseId: Long)
     fun findByDeadlineNotNullAndStatusIn(statuses: List<TaskStatus>): List<TaskJpaEntity>
 

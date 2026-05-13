@@ -34,7 +34,7 @@ class KickMemberUsecase(
 
         val userTasks = taskRepository.findByAssignedTo(kickedUserId)
         userTasks.forEach { task ->
-            if (task.status == TaskStatus.ASSIGNED) {
+            if (task.status == TaskStatus.ASSIGNED || task.status == TaskStatus.PENDING_REVIEW) {
                 val freedTask = task.copy(
                     status = TaskStatus.OPEN,
                     assignedTo = null,
