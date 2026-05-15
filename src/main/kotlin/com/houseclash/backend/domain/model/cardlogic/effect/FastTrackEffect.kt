@@ -20,7 +20,7 @@ class FastTrackEffect : CardEffect {
             if (task.isCompletedAfterDeadline()) return@mapNotNull null
             val assignee = context.houseMembers.find { it.id == task.assignedTo }
                 ?: return@mapNotNull null
-            assignee.addKudos(task.kudosValue)
+            assignee.addKudos(task.kudosValue).recordKudosEarned(task.kudosValue)
         }
 
         return CardEffectResult(
