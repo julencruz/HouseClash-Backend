@@ -31,6 +31,9 @@ class LeaveHouseUsecase(
         require(!isCaptain || isLastMember) { "The captain cannot leave the house while other members remain. Transfer ownership first." }
 
 
+        cardRepository.deleteByUserId(userId)
+        val updatedUser = userRepository.save(user.leaveHouse(houseId))
+
         if (isLastMember) {
             taskRepository.deleteByHouseId(houseId)
             categoryRepository.deleteByHouseId(houseId)
@@ -49,8 +52,6 @@ class LeaveHouseUsecase(
             }
         }
 
-        cardRepository.deleteByUserId(userId)
-
-        return userRepository.save(user.leaveHouse(houseId))
+        return updatedUser
     }
 }
