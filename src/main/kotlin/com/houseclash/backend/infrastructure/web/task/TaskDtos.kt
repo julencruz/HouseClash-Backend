@@ -22,9 +22,12 @@ data class CreateTaskRequest(
 data class UpdateTaskRequest(
     val title: String? = null,
     val description: String? = null,
+    val clearDescription: Boolean = false,
     val effort: Effort? = null,
     val recurrence: String? = null,
+    val clearRecurrence: Boolean = false,
     val deadline: LocalDateTime? = null,
+    val clearDeadline: Boolean = false,
     val categoryId: Long? = null
 )
 

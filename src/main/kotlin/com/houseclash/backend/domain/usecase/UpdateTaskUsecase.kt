@@ -18,8 +18,10 @@ class UpdateTaskUsecase(
         taskId: Long,
         title: String? = null,
         description: String? = null,
+        clearDescription: Boolean = false,
         effort: Effort? = null,
         recurrence: String? = null,
+        clearRecurrence: Boolean = false,
         deadline: LocalDateTime? = null,
         clearDeadline: Boolean = false,
         categoryId: Long? = null
@@ -39,19 +41,19 @@ class UpdateTaskUsecase(
         }
 
 
-        val newRecurrence = if (recurrence != null) {
-            try {
+        val newRecurrence = when {
+            clearRecurrence -> null
+            recurrence != null -> try {
                 Recurrence.valueOf(recurrence)
-            } catch (e: IllegalArgumentException) {
+            } catch (_: IllegalArgumentException) {
                 throw IllegalArgumentException("Invalid recurrence value")
             }
-        } else {
-            null
+            else -> task.recurrence
         }
 
         val updatedTask = task.update(
             newTitle = title ?: task.title,
-            newDescription = description,
+            newDescription = if (clearDescription) null else description ?: task.description,
             newEffort = effort,
             newRecurrence = newRecurrence,
             newDeadline = deadline,

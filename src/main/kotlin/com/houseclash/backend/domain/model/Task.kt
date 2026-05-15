@@ -214,10 +214,10 @@ data class Task(
 
         return this.copy(
             title = newTitle ?: this.title,
-            description = newDescription,
+            description = newDescription ?: this.description,
             effort = updatedEffort,
             kudosValue = updatedKudosValue,
-            recurrence = newRecurrence,
+            recurrence = newRecurrence ?: this.recurrence,
             deadline = effectiveDeadline,
             categoryId = newCategoryId ?: this.categoryId
         )

@@ -77,9 +77,12 @@ class TaskController(
             taskId = taskId,
             title = request.title,
             description = request.description,
+            clearDescription = request.clearDescription,
             effort = request.effort,
             recurrence = request.recurrence,
+            clearRecurrence = request.clearRecurrence,
             deadline = request.deadline,
+            clearDeadline = request.clearDeadline,
             categoryId = request.categoryId
         )
         val category = categoryMapFor(userId).getValue(task.categoryId)
