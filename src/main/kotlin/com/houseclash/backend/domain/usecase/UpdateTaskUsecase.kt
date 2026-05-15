@@ -46,12 +46,12 @@ class UpdateTaskUsecase(
                 throw IllegalArgumentException("Invalid recurrence value")
             }
         } else {
-            task.recurrence
+            null
         }
 
         val updatedTask = task.update(
             newTitle = title ?: task.title,
-            newDescription = description ?: task.description,
+            newDescription = description,
             newEffort = effort,
             newRecurrence = newRecurrence,
             newDeadline = deadline,
