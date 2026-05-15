@@ -20,7 +20,10 @@ data class UserResponse(
     val email: String,
     val houseId: Long?,
     val kudosBalance: Int,
-    val createdAt: LocalDateTime
+    val createdAt: LocalDateTime,
+    val totalTasksCompleted: Int,
+    val totalKudosEarned: Int,
+    val totalCardsPlayed: Int
 )
 
 data class LoginResponse(
@@ -40,5 +43,8 @@ fun User.toResponse() = UserResponse(
     email = this.email,
     houseId = this.houseId,
     kudosBalance = this.kudosBalance,
-    createdAt = this.createdAt
+    createdAt = this.createdAt,
+    totalTasksCompleted = this.totalTasksCompleted,
+    totalKudosEarned = this.totalKudosEarned,
+    totalCardsPlayed = this.totalCardsPlayed
 )

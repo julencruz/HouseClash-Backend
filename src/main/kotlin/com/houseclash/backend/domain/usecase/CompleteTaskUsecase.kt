@@ -22,6 +22,7 @@ class CompleteTaskUsecase (
         require(user != null) { "User does not exist" }
 
         val completedTask = taskRepository.save(task.completeTask())
+        userRepository.save(user.recordTaskCompleted())
 
         activityLogRepository.save(ActivityLog(
             houseId = task.houseId,

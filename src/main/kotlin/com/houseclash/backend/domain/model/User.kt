@@ -10,7 +10,10 @@ data class User(
     val kudosBalance: Int = 0,
     val houseId: Long? = null,
     val visitedHouseIds: Set<Long> = emptySet(),
-    val createdAt: LocalDateTime = LocalDateTime.now()
+    val createdAt: LocalDateTime = LocalDateTime.now(),
+    val totalTasksCompleted: Int = 0,
+    val totalKudosEarned: Int = 0,
+    val totalCardsPlayed: Int = 0
 ) {
     companion object {
         fun create(username: String, email: String, encodedPassword: String): User {
@@ -59,6 +62,15 @@ data class User(
         val newBalance = if (kudosBalance - amount < 0) 0 else kudosBalance - amount
         return this.copy(kudosBalance = newBalance)
     }
+
+    fun recordTaskCompleted(): User = this.copy(totalTasksCompleted = totalTasksCompleted + 1)
+
+    fun recordKudosEarned(kudos: Int): User {
+        require(kudos > 0) { "Kudos must be positive" }
+        return this.copy(totalKudosEarned = totalKudosEarned + kudos)
+    }
+
+    fun recordCardPlayed(): User = this.copy(totalCardsPlayed = totalCardsPlayed + 1)
 
     fun update(
         newUsername: String? = null,

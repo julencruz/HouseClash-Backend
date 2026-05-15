@@ -51,6 +51,8 @@ class ExecuteCardEffectUsecase(
         result.updatedUsers.forEach { userRepository.save(it) }
         result.updatedTasks.forEach { taskRepository.save(it) }
         cardRepository.delete(cardId)
+        val latestExecutingUser = userRepository.findById(executingUserId) ?: executingUser
+        userRepository.save(latestExecutingUser.recordCardPlayed())
 
         activityLogRepository.save(ActivityLog(
             houseId = executingUser.houseId,

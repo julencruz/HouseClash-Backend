@@ -36,7 +36,16 @@ class UserJpaEntity(
     val visitedHouseIds: Set<Long> = emptySet(),
 
     @Column(nullable = false, updatable = false)
-    val createdAt: LocalDateTime = LocalDateTime.now()
+    val createdAt: LocalDateTime = LocalDateTime.now(),
+
+    @Column(nullable = false)
+    val totalTasksCompleted: Int = 0,
+
+    @Column(nullable = false)
+    val totalKudosEarned: Int = 0,
+
+    @Column(nullable = false)
+    val totalCardsPlayed: Int = 0
 )
 
 fun UserJpaEntity.toDomain(): User {
@@ -48,7 +57,10 @@ fun UserJpaEntity.toDomain(): User {
         kudosBalance = this.kudosBalance,
         houseId = this.houseId,
         visitedHouseIds = this.visitedHouseIds,
-        createdAt = this.createdAt
+        createdAt = this.createdAt,
+        totalTasksCompleted = this.totalTasksCompleted,
+        totalKudosEarned = this.totalKudosEarned,
+        totalCardsPlayed = this.totalCardsPlayed
     )
 }
 
@@ -61,6 +73,9 @@ fun User.toEntity(): UserJpaEntity {
         houseId = this.houseId,
         kudosBalance = this.kudosBalance,
         visitedHouseIds = this.visitedHouseIds,
-        createdAt = this.createdAt
+        createdAt = this.createdAt,
+        totalTasksCompleted = this.totalTasksCompleted,
+        totalKudosEarned = this.totalKudosEarned,
+        totalCardsPlayed = this.totalCardsPlayed
     )
 }
