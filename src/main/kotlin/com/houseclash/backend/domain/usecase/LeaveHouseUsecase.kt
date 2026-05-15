@@ -8,8 +8,9 @@ import com.houseclash.backend.domain.port.CategoryRepository
 import com.houseclash.backend.domain.port.HouseRepository
 import com.houseclash.backend.domain.port.TaskRepository
 import com.houseclash.backend.domain.port.UserRepository
+import org.springframework.transaction.annotation.Transactional
 
-class LeaveHouseUsecase(
+open class LeaveHouseUsecase(
     private val userRepository: UserRepository,
     private val taskRepository: TaskRepository,
     private val cardRepository: CardRepository,
@@ -17,7 +18,8 @@ class LeaveHouseUsecase(
     private val categoryRepository: CategoryRepository,
     private val activityLogRepository: ActivityLogRepository
 ) {
-    fun execute(userId: Long): User {
+    @Transactional
+    open fun execute(userId: Long): User {
         val user = userRepository.findById(userId)
         require(user != null) { "User does not exist." }
 
