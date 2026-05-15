@@ -6,7 +6,7 @@ import com.houseclash.backend.domain.model.cardlogic.CardEffectResult
 
 class HouseBonusEffect : CardEffect {
     override fun execute(context: CardEffectContext): CardEffectResult {
-        val updatedMembers = context.houseMembers.map { it.addKudos(2) }
+        val updatedMembers = context.houseMembers.map { it.addKudos(2).recordKudosEarned(2) }
         return CardEffectResult(
             updatedUsers = updatedMembers,
             description = "All house members received +2 Kudos!",
