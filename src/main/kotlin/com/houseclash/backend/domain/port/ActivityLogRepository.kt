@@ -8,4 +8,5 @@ interface ActivityLogRepository {
     fun findByHouseIdOrderByCreatedAtDesc(houseId: Long, page: Int, size: Int): List<ActivityLog>
     fun countByHouseId(houseId: Long): Long
     fun deleteOldLogsExceptPendingReview(houseId: Long, pendingTaskIds: List<Long>)
+    fun deleteByHouseId(houseId: Long)
 }

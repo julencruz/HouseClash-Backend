@@ -36,4 +36,8 @@ class ActivityLogRepositoryTester : ActivityLogRepository {
             logs.removeIf { it.houseId == houseId && (it.taskId == null || it.taskId !in pendingTaskIds) }
         }
     }
+
+    override fun deleteByHouseId(houseId: Long) {
+        logs.removeIf { it.houseId == houseId }
+    }
 }

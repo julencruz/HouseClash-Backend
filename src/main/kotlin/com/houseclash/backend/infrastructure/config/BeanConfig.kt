@@ -49,8 +49,9 @@ class BeanConfig {
         taskRepository: TaskRepository,
         cardRepository: CardRepository,
         houseRepository: HouseRepository,
-        categoryRepository: CategoryRepository
-    ) = LeaveHouseUsecase(userRepository, taskRepository, cardRepository, houseRepository, categoryRepository)
+        categoryRepository: CategoryRepository,
+        activityLogRepository: ActivityLogRepository
+    ) = LeaveHouseUsecase(userRepository, taskRepository, cardRepository, houseRepository, categoryRepository, activityLogRepository)
 
     @Bean
     fun kickMemberUsecase(

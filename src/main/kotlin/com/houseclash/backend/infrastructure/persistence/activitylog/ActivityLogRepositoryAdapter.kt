@@ -34,4 +34,8 @@ class ActivityLogRepositoryAdapter(
             jpaRepository.deleteByHouseIdExcludingPendingTasks(houseId, pendingTaskIds)
         }
     }
+
+    override fun deleteByHouseId(houseId: Long) {
+        jpaRepository.deleteByHouseId(houseId)
+    }
 }

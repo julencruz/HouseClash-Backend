@@ -2,6 +2,7 @@ package com.houseclash.backend.domain.usecase
 
 import com.houseclash.backend.domain.model.TaskStatus
 import com.houseclash.backend.domain.model.User
+import com.houseclash.backend.domain.port.ActivityLogRepository
 import com.houseclash.backend.domain.port.CardRepository
 import com.houseclash.backend.domain.port.CategoryRepository
 import com.houseclash.backend.domain.port.HouseRepository
@@ -13,7 +14,8 @@ class LeaveHouseUsecase(
     private val taskRepository: TaskRepository,
     private val cardRepository: CardRepository,
     private val houseRepository: HouseRepository,
-    private val categoryRepository: CategoryRepository
+    private val categoryRepository: CategoryRepository,
+    private val activityLogRepository: ActivityLogRepository
 ) {
     fun execute(userId: Long): User {
         val user = userRepository.findById(userId)
@@ -35,6 +37,7 @@ class LeaveHouseUsecase(
         val updatedUser = userRepository.save(user.leaveHouse(houseId))
 
         if (isLastMember) {
+            activityLogRepository.deleteByHouseId(houseId)
             taskRepository.deleteByHouseId(houseId)
             categoryRepository.deleteByHouseId(houseId)
             houseRepository.delete(house)

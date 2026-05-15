@@ -1,6 +1,7 @@
 package com.houseclash.backend.domain.usecase
 
 import com.houseclash.backend.domain.model.TaskStatus
+import com.houseclash.backend.helper.ActivityLogRepositoryTester
 import com.houseclash.backend.helper.CardRepositoryTester
 import com.houseclash.backend.helper.CategoryRepositoryTester
 import com.houseclash.backend.helper.HouseRepositoryTester
@@ -16,8 +17,9 @@ class LeaveHouseUsecaseTest {
     private val cardRepository = CardRepositoryTester()
     private val houseRepository = HouseRepositoryTester()
     private val categoryRepository = CategoryRepositoryTester()
+    private val activityLogRepository = ActivityLogRepositoryTester()
 
-    private val usecase = LeaveHouseUsecase(userRepository, taskRepository, cardRepository, houseRepository, categoryRepository)
+    private val usecase = LeaveHouseUsecase(userRepository, taskRepository, cardRepository, houseRepository, categoryRepository, activityLogRepository)
 
     @Test
     fun `should throw when user does not exist`() {
