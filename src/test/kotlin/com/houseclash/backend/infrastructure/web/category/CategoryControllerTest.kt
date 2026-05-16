@@ -103,14 +103,15 @@ class CategoryControllerTest {
     }
 
     @Test
-    fun `should throw when a non-captain member tries to create a category`() {
+    fun `should return 201 when a non-captain member creates a category`() {
         val member = registerUserUsecase.execute("Member", "member@email.com", "Password1")
         joinHouseUsecase.execute(member.id!!, house.inviteCode)
         val auth = UsernamePasswordAuthenticationToken(member.id, null, emptyList())
 
-        assertThrows(IllegalArgumentException::class.java) {
-            controller.create(CreateCategoryRequest(name = "Kitchen", houseId = house.id!!), auth)
-        }
+        val response = controller.create(CreateCategoryRequest(name = "Kitchen", houseId = house.id!!), auth)
+
+        assertEquals(HttpStatus.CREATED, response.statusCode)
+        assertEquals("Kitchen", response.body?.name)
     }
 
     @Test

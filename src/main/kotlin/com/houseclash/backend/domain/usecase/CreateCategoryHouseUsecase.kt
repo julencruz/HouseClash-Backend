@@ -17,7 +17,6 @@ class CreateCategoryHouseUsecase(
         val user = userRepository.findById(userId)
         require(user != null) { "User not found" }
         require(user.houseId == houseId) { "User does not belong to this house" }
-        require(house.createdBy == userId) { "Only the house captain can create categories." }
 
         val existingCategories = categoryRepository.findByHouseId(houseId)
         require(existingCategories.none { it.name.equals(name, ignoreCase = true) })

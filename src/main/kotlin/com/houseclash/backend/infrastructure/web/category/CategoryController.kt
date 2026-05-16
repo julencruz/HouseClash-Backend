@@ -29,7 +29,7 @@ class CategoryController(
         return ResponseEntity.ok(categories.map { it.toResponse() })
     }
 
-    @Operation(summary = "Crear categoria", description = "Crea una nova categoria per organitzar les tasques de la llar. Només el capitá pot crear categories")
+    @Operation(summary = "Crear categoria", description = "Crea una nova categoria per organitzar les tasques de la llar. Qualsevol membre de la llar pot crear categories")
     @PostMapping
     fun create(
         @RequestBody request: CreateCategoryRequest,
