@@ -121,4 +121,26 @@ class UpdateTaskUsecaseTest {
 
         assertEquals(Effort.HIGH, result.effort)
     }
+
+    @Test
+    fun `should update only category without affecting other fields`() {
+        val user = TestDataFactory.createUser(userRepository)
+        val house = TestDataFactory.createHouse(houseRepository, userRepository, user)
+        val originalCategory = TestDataFactory.createCategory(categoryRepository, house.id!!)
+        val newCategory = TestDataFactory.createCategory(categoryRepository, house.id, "Nova categoria")
+        val task = TestDataFactory.createTask(
+            taskRepository, house.id,
+            effort = Effort.LOW,
+            categoryId = originalCategory.id!!
+        )
+
+        val result = usecase.execute(user.id!!, task.id!!, categoryId = newCategory.id!!)
+
+        assertEquals(newCategory.id, result.categoryId)
+        assertEquals(task.title, result.title)
+        assertEquals(task.description, result.description)
+        assertEquals(task.effort, result.effort)
+        assertEquals(task.recurrence, result.recurrence)
+        assertEquals(task.kudosValue, result.kudosValue)
+    }
 }
